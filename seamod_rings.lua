@@ -535,7 +535,7 @@ function conky_freq_avg()
   for i=1, #fl do
     sum = sum + fl[i]
   end
-  return sum / #fl
+  return math.floor((sum/#fl) + 0.5)
 end
 
 
