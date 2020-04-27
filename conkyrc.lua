@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------------
 -- conkyrc_seamod
--- Date : 2016/11/13
+-- Date : 2020/04/27
 -- Author : SeaJey, Maxiwell and JPvRiel
 -- Conky : >= 1.10
 -- License : Distributed under the terms of GNU GPL version 2 or later
@@ -22,10 +22,12 @@ conky.config = {
 
   own_window = true,
   own_window_class = 'conky-semi',
+  --own_window_type = 'normal',
+  own_window_type = 'desktop',
+  --own_window_type = 'dock',
+  --own_window_type = 'panel',
   --own_window_type = 'override',
-  --own_window_type = 'desktop',
-  own_window_type = 'dock',
-  own_window_hints = 'undecorated,sticky,skip_taskbar,skip_pager,below',
+  --own_window_hints = 'undecorated,sticky,skip_taskbar,skip_pager,below',
 
   own_window_colour = '#000000',
   own_window_transparent = false,
@@ -43,14 +45,20 @@ conky.config = {
   minimum_width = 340, minimum_height = 600,
   maximum_width = 360,
   border_inner_margin = 0,
-  border_outer_margin = 20,
+  border_outer_margin = 25,
   xinerama_head = 0,
 
   override_utf8_locale = true,
   use_xft = true,
-  font = 'Ubuntu:size=11',
+  font = 'Roboto:size=10',
   xftalpha = 0.8,
   uppercase = false,
+
+  -- Options
+  top_cpu_separate = true,
+  top_name_verbose = true,
+  top_name_width = 25,
+  short_units = true,
 
   -- Defining colors
   default_color = '#FFFFFF',
@@ -62,7 +70,9 @@ conky.config = {
   -- Orange
   color5 = '#EF5A29',
   -- Green
-  color6 = '#77B753',
+  --color6 = '#77B753',
+  -- Blue
+  color6 = '#2D6A92',
 
   -- Loading lua script for drawning rings
   lua_load = '~/.conky/seamod/seamod_rings.lua',
@@ -72,87 +82,87 @@ conky.config = {
 
 conky.text = [[
 # Showing CPU Graph with TOP 5
-${offset 180}${color1}${font Ubuntu:size=10:style=bold}Temp: ${font Ubuntu:size=10:style=normal}${alignr}${color4}[${hwmon 2 temp 2},${hwmon 2 temp 3},${hwmon 2 temp 4},${hwmon 2 temp 5}] ${alignr}${color2}${hwmon 2 temp 1} C
-${offset 180}${color1}${font Ubuntu:size=10:style=bold}Fan: ${alignr}${font Ubuntu:size=10:style=normal}${color2}${hwmon 3 fan 1} RPM
-${offset 180}${color1}${font Ubuntu:size=10:style=bold}Freq: ${alignr}${font Ubuntu:size=10:style=normal}${alignr}${color4}[${lua freq_min} - ${lua freq_max}] ${alignr}${color2}${lua freq_avg} MHz
-${offset 145}${cpugraph cpu0 30,200 666666 666666}
-${voffset -32}
-${offset 91}${font Ubuntu:size=11:style=bold}${color6}PROC
+${offset 180}${color1}${font Roboto:medium:size=10}Temp: ${font Roboto:regular:size=10}${alignr}${color4}[${hwmon 5 temp 2},${hwmon 5 temp 3},${hwmon 5 temp 4},${hwmon 5 temp 5},${hwmon 5 temp 6},${hwmon 5 temp 7}] ${alignr}${color2}${hwmon 5 temp 1} C
+${offset 180}${color1}${font Roboto:medium:size=10}Fan: ${alignr}${font Roboto:regular:size=10}${color2}${hwmon 4 fan 1} RPM
+${offset 180}${color1}${font Roboto:medium:size=10}Freq: ${alignr}${font Roboto:regular:size=10}${alignr}${color4}[${lua freq_min} - ${lua freq_max}] ${alignr}${color2}${lua freq_avg} MHz
+${offset 145}${cpugraph cpu0 30,200 808080 808080}
+${voffset -31}\
+${offset 91}${font Roboto:bold:size=12}${color6}PROC
 # Showing TOP 5 CPU-consumers
-${offset 110}${font Ubuntu:size=11:style=normal}${color5}${top name 1}${alignr}${top cpu 1}%
-${offset 110}${font Ubuntu:size=11:style=normal}${color1}${top name 2}${alignr}${top cpu 2}%
-${offset 110}${font Ubuntu:size=10:style=normal}${color2}${top name 3}${alignr}${top cpu 3}%
-${offset 110}${font Ubuntu:size=10:style=normal}${color3}${top name 4}${alignr}${top cpu 4}%
-${offset 110}${font Ubuntu:size=10:style=normal}${color3}${top name 5}${alignr}${top cpu 5}%
-
-
+${offset 110}${font Roboto:regular:size=11}${color5}${top name 1}${alignr}${font Roboto:medium:size=11}${top cpu 1}%
+${offset 110}${font Roboto:regular:size=10}${color1}${top name 2}${alignr}${font Roboto:medium:size=10}${top cpu 2}%
+${offset 110}${font Roboto:regular:size=9}${color2}${top name 3}${alignr}${font Roboto:medium:size=9}${top cpu 3}%
+${offset 110}${font Roboto:light:size=9}${color3}${top name 4}${alignr}${font Roboto:regular:size=9}${top cpu 4}%
+${offset 110}${font Roboto:thin:size=9}${color3}${top name 5}${alignr}${font Roboto:light:size=9}${top cpu 5}%
+${voffset 10}\
 #Showing memory Graph with TOP 5
-${offset 180}${color1}${font Ubuntu:size=10:style=bold}Availble: ${alignr}${font Ubuntu:size=10:style=normal}${color2}${memeasyfree}
-${offset 180}${color1}${font Ubuntu:size=10:style=bold}Cache: ${alignr}${font Ubuntu:size=10:style=normal}${color2}${cached}
-${offset 180}${color1}${font Ubuntu:size=10:style=bold}Buffer: ${alignr}${font Ubuntu:size=10:style=normal}${color2}${buffers}
-${offset 145}${memgraph 30,200 666666 666666}
-${voffset -32}
-${offset 100}${font Ubuntu:size=11:style=bold}${color6}MEM
-${offset 110}${font Ubuntu:size=12:style=normal}${color5}${top_mem name 1}${alignr}${top_mem mem_res 1}
-${offset 110}${font Ubuntu:size=11:style=normal}${color1}${top_mem name 2}${alignr}${top_mem mem_res 2}
-${offset 110}${font Ubuntu:size=10:style=normal}${color2}${top_mem name 3}${alignr}${top_mem mem_res 3}
-${offset 110}${font Ubuntu:size=10:style=normal}${color3}${top_mem name 4}${alignr}${top_mem mem_res 4}
-${offset 110}${font Ubuntu:size=10:style=normal}${color3}${top_mem name 5}${alignr}${top_mem mem_res 5}
-
-
-
+${offset 180}${color1}${font Roboto:regular:size=10}Availble: ${alignr}${font Roboto:regular:size=10}${color2}${memeasyfree}
+${offset 180}${color1}${font Roboto:regular:size=10}Cache: ${alignr}${font Roboto:regular:size=10}${color2}${cached}
+${offset 180}${color1}${font Roboto:regular:size=10}Buffer: ${alignr}${font Roboto:regular:size=10}${color2}${buffers}
+${offset 145}${memgraph 30,200 808080 808080}
+${voffset -27}\
+${offset 99}${font Roboto:bold:size=12}${color6}MEM
+${offset 110}${font Roboto:medium:size=11}${color5}${top_mem name 1}${alignr}${font Roboto:medium:size=11}${top_mem mem_res 1}
+${offset 110}${font Roboto:medium:size=10}${color1}${top_mem name 2}${alignr}${font Roboto:medium:size=10}${top_mem mem_res 2}
+${offset 110}${font Roboto:regular:size=9}${color2}${top_mem name 3}${alignr}${font Roboto:medium:size=9}${top_mem mem_res 3}
+${offset 110}${font Roboto:light:size=9}${color3}${top_mem name 4}${alignr}${font Roboto:regular:size=9}${top_mem mem_res 4}
+${offset 110}${font Roboto:thin:size=9}${color3}${top_mem name 5}${alignr}${font Roboto:light:size=9}${top_mem mem_res 5}
+${voffset 10}\
 # Showing disk partitions: root, home and files
-${offset 180}${color1}${font Ubuntu:size=10:style=bold}Read: ${alignr}${font Ubuntu:size=10:style=normal}${color2}${diskio_read}
-${offset 180}${color1}${font Ubuntu:size=10:style=bold}Write: ${alignr}${font Ubuntu:size=10:style=normal}${color2}${diskio_write}
-${offset 145}${diskiograph 30,200 666666 666666}
-${voffset -32}
-${offset 85}${font Ubuntu:size=11:style=bold}${color6}STORE
-${offset 110}${font Ubuntu:size=12:style=normal}${color5}${top_io name 1}${alignr}r:${top_io io_read 1}w:${top_io io_write 1}
-${offset 110}${font Ubuntu:size=11:style=normal}${color1}${top_io name 2}${alignr}r:${top_io io_read 2}w:${top_io io_write 2}
-${offset 110}${font Ubuntu:size=10:style=normal}${color2}${top_io name 3}${alignr}r:${top_io io_read 3}w:${top_io io_write 3}
-${offset 110}${font Ubuntu:size=10:style=normal}${color2}${top_io name 4}${alignr}r:${top_io io_read 4}w:${top_io io_write 4}
-${offset 110}${font Ubuntu:size=10:style=normal}${color2}${top_io name 5}${alignr}r:${top_io io_read 5}w:${top_io io_write 5}
-
+# Would be nice to show and summarise iowait times, and while conky source reads it, theres no exposed object for it
+${offset 180}${color1}${font Roboto:regular:size=10} 
+${offset 180}${color1}${font Roboto:regular:size=10}Read: ${alignr}${font Roboto:medium:size=10}${color2}${diskio_read}
+${offset 180}${color1}${font Roboto:regular:size=10}Write: ${alignr}${font Roboto:medium:size=10}${color2}${diskio_write}
+${offset 145}${diskiograph 30,200 808080 808080}
+${voffset -26}\
+${offset 83}${font Roboto:bold:size=12}${color6}STORE
+${offset 110}${font Roboto:medium:size=12}${color5}${top_io name 1}${alignr} ${font Roboto:medium:size=11}r:${top_io io_read 1}| w:${top_io io_write 1}
+${offset 110}${font Roboto:medium:size=10}${color1}${top_io name 2}${alignr} ${font Roboto:medium:size=10}r:${top_io io_read 2}| w:${top_io io_write 2}
+${offset 110}${font Roboto:regular:size=9}${color2}${top_io name 3}${alignr} ${font Roboto:medium:size=9}r:${top_io io_read 3}| w:${top_io io_write 3}
+${offset 110}${font Roboto:light:size=9}${color2}${top_io name 4}${alignr} ${font Roboto:regular:size=9}r:${top_io io_read 4}| w:${top_io io_write 4}
+${offset 110}${font Roboto:thin:size=9}${color2}${top_io name 5}${alignr} ${font Roboto:light:size=9}r:${top_io io_read 5}| w:${top_io io_write 5}
+${voffset 10}\
 # Network data (assumes wireless info). NET ring is mostly useless but looks pretty, main info is in the graphs
-${if_up eth0}
+${if_up eth0}\
 ${if_match "${addr eth0}" != "No Address"}\
-${offset 180}${font Ubuntu:size=10:style=bold}${color1}Wired
-${offset 180}${font Ubuntu:size=10:style=bold}${color1}IP: ${alignr}${font Ubuntu:size=10:style=normal}${color2}${addr eth0}
-${offset 180}${font Ubuntu:size=10:style=bold}${color1}Public IP: ${alignr}${font Ubuntu:size=10:style=normal}${color2}${curl http://api.ipify.org 300}
+${offset 180}${font Roboto:regular:size=10}${color1}Wired
+${offset 180}${font Roboto:regular:size=10}${color1}IP: ${alignr}${font Roboto:regular:size=10}${color2}${addr eth0}
+${offset 180}${font Roboto:regular:size=10}${color1}Public IP: ${alignr}${font Roboto:regular:size=10}${color2}${curl http://api.ipify.org 300}
 ${offset 145}${upspeedgraph eth0 25,200 4B1B0C FF5C2B 10240KiB -l}
-${offset 145}${color1}${font Ubuntu:size=10:style=bold}Up: ${alignr}${font Ubuntu:size=10:style=normal}${color3}${upspeed eth0} / ${totalup eth0}
+${offset 145}${color1}${font Roboto:regular:size=10}Up: ${alignr}${font Roboto:regular:size=10}${color3}${upspeed eth0} / ${totalup eth0}
 ${offset 145}${downspeedgraph eth0 25,200 324D23 77B753 10240KiB -l}
-${offset 145}${color1}${font Ubuntu:size=10:style=bold}Down: ${alignr}${font Ubuntu:size=10:style=normal}${color3}${downspeed eth0} / ${totaldown eth0}
+${offset 145}${color1}${font Roboto:regular:size=10}Down: ${alignr}${font Roboto:regular:size=10}${color3}${downspeed eth0} / ${totaldown eth0}
 ${endif}\
 ${else}\
 ${if_match "${addr wlan0}" != "No Address"}\
-${offset 180}${font Ubuntu:size=10:style=bold}${color1}Wifi: ${alignr}${font Ubuntu:size=10:style=normal}${color2}${wireless_essid} (${wireless_bitrate wlan0})
-${offset 180}${font Ubuntu:size=10:style=bold}${color1}IP: ${alignr}${font Ubuntu:size=10:style=normal}${color2}${addr wlan0}
-${offset 180}${font Ubuntu:size=10:style=bold}${color1}Public IP: ${alignr}${font Ubuntu:size=10:style=normal}${color2}${curl http://api.ipify.org 300}
+${offset 180}${font Roboto:regular:size=10}${color1}Wifi: ${alignr}${font Roboto:regular:size=10}${color2}${wireless_essid} (${wireless_bitrate wlan0})
+${offset 180}${font Roboto:regular:size=10}${color1}IP: ${alignr}${font Roboto:regular:size=10}${color2}${addr wlan0}
+${offset 180}${font Roboto:regular:size=10}${color1}Public IP: ${alignr}${font Roboto:regular:size=10}${color2}${curl http://api.ipify.org 300}
 ${offset 145}${upspeedgraph wlan0 25,200 4B1B0C FF5C2B 10240KiB -l}
-${offset 145}${color1}${font Ubuntu:size=10:style=bold}Up: ${alignr}${font Ubuntu:size=10:style=normal}${color3}${upspeed wlan0} / ${totalup wlan0}
+${offset 145}${color1}${font Roboto:regular:size=10}Up: ${alignr}${font Roboto:regular:size=10}${color3}${upspeed wlan0} / ${totalup wlan0}
 ${offset 145}${downspeedgraph wlan0 25,200 324D23 77B753 10240KiB -l}
-${offset 145}${color1}${font Ubuntu:size=10:style=bold}Down: ${alignr}${font Ubuntu:size=10:style=normal}${color3}${downspeed wlan0} / ${totaldown wlan0}
+${offset 145}${color1}${font Roboto:regular:size=10}Down: ${alignr}${font Roboto:regular:size=10}${color3}${downspeed wlan0} / ${totaldown wlan0}
 ${else}\
-${offset 180}${font Ubuntu:size=10:style=bold}${color1}Disconnected
-${offset 180}${font Ubuntu:size=10:style=normal}${color3}(eth0 and wlan0 have no IP)
+${offset 180}${font Roboto:bold:size=10}${color1}Disconnected
+${offset 180}${font Roboto:regular:size=10}${color3}(eth0 and wlan0 have no IP)
 ${offset 145}${upspeedgraph eth0 25,200 4B1B0C FF5C2B 10240KiB -l}
-${offset 145}${color1}${font Ubuntu:size=10:style=bold}Up: ${alignr}${font Ubuntu:size=10:style=normal}${color3}NA
+${offset 145}${color1}${font Roboto:regular:size=10}Up: ${alignr}${font Roboto:medium:size=10}${color3}NA
 ${offset 145}${downspeedgraph eth0 25,200 324D23 77B753 10240KiB -l}
-${offset 145}${color1}${font Ubuntu:size=10:style=bold}Down: ${alignr}${font Ubuntu:size=10:style=normal}${color3}NA
+${offset 145}${color1}${font Roboto:regular:size=10}Down: ${alignr}${font Roboto:medium:size=10}${color3}NA
 ${endif}\
 ${endif}\
-${voffset -100}
-${offset 105}${font Ubuntu:size=11:style=bold}${color6}NET
-
+${voffset -120}
+${offset 106}${font Roboto:bold:size=12}${color6}NET
+${voffset 100}\
 #### Modifications below HERE wont cause alignment problems with the gauges/rings ####
 # Extra info
-${voffset 60}
-${offset 15}${font Ubuntu:size=11:style=normal}${color1}Entropy:${tab}${color3}${entropy_bar 5,140} ${color3}${entropy_perc}% (${entropy_avail}/${entropy_poolsize})
-${offset 15}${font Ubuntu:size=11:style=normal}${color1}Battery:${tab}${color3}${battery_bar 5,140} ${if_match ${battery_percent BAT0} <= 33}${color5}${else}${color3}${endif}${battery_short}${if_match ${battery_percent BAT0} != 100} (${battery_time})${endif}
-${offset 15}${font Ubuntu:size=11:style=normal}${color1}Uptime:${tab}${tab}${color3}$uptime
-
+${offset 15}${font Roboto:regular:size=10}${color1}Entropy:${tab}${color3}${entropy_bar 5,170} ${color3}${entropy_perc}% (${entropy_avail}/${entropy_poolsize})
+${offset 15}${font Roboto:regular:size=10}${color1}Battery:${tab}${tab}${color3}${battery_bar 5,170} ${if_match ${battery_percent BAT0} <= 33}${color5}${else}${color3}${endif}${battery_short}${if_match ${battery_percent BAT0} != 100} (${battery_time})${endif}
+${offset 15}${font Roboto:regular:size=10}${color1}Uptime:${tab}${color3} $uptime
+${voffset 0}
 # Log feed
-${offset 15}${font Ubuntu:size=11:style=normal}${color1}Syslog Err:
-${voffset 3}${color3}${font Ubuntu Condensed:size=8:style=normal}${texecpi 60 ~/.conky/seamod/syslog-err-feed.sh }
+${offset 15}${font Roboto:bold:size=10}${color6}JOURNAL ${font Roboto:regular:size=10}${color1}(Err|Warn):
+${voffset 3}\
+${color3}${font Ubuntu Condensed:light:size=8}${texecpi 15 ~/.conky/seamod/journal-err-feed.sh }
+${voffset -100}\
 ]];
