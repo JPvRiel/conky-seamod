@@ -69,16 +69,28 @@ Hardware such as number of CPU cores, the place to get temperatures and even the
 
 ### Adjusting the number of rings
 
-Modify CPU rings in `seamod_rings.lua`'s `gauge` data structure list.
+Modify CPU rings in `seamod_rings.lua`'s `gauge` data structure list. You'll likely need to the number of 'cpu' ring items to match the output of the `nproc` command.
 
-- The original version `seamod_rings_simple_cpu.lua` draws the arch of each CPU hyper-thread around 270 degrees.
-  - Change the number of 'cpu' items  match the output of the `nproc` command. Simply comment out or remove `cpu` items in the list.
-  - Default is 8 'CPU' instances (cores and hyper threads).
-- My adaptation splits sibling hyper-thread 'cpus' as -135 and +135 degrees shared in the same 270 degree arch line, at the midpoint.
-  - This provided a nicer way to cram in a high CPU count.
-  - It's also more technically accurate since a hyper-threaded instance of a core isn't a full additional CPU.
+Current examples are for an Intel i7-9750H (6 core, 12 thread). To adapt it:
 
-The CPU topology can be inspected via sysfs, e.g. for an Intel i7-9750H (6 core, 12 thread):
+- If you have less than 12, simply comment out or remove `cpu` items in the list.
+  - You'll likely want to make rings thicker if you have less than 8.
+- If you have more than 12, there's a bit of room left to extend it up to 16.
+  - Scaling down the ring thickness will be needed for more than 16 cpu items.
+
+There are some variations on the ring concept depending on hyper threading and the number of cores. 
+
+- The original evenly spaced CPU ring concept is in [seamod_rings_cpu_simple.lua](seamod_rings_cpu_simple.lua).
+- My adaptations relate sibling hyper-thread 'cpus'. There are two styles to choose from:
+  - [seamod_ring_cpu_pairs.lua](seamod_ring_cpu_pairs.lua):
+    - Sibling hyperthreads rings are paired closely to look as if they're a single ring.
+    - This more clearly reflects a core with a pair of hyperthreads.
+  - [seamod_rings_cpu_overlap.lua](seamod_rings_cpu_overlap.lua):
+    - Both sibling hyperthreads are drawning in the same ring contributing half of the opacity. Each has it's own red marker.
+    - This provides a nicer way to cram in a high hyper-threaded CPU count, e.g. 16+, in order to avoid too many skinny rings.
+    - It's also more technically accurate since a hyper-threaded instance of a core isn't a full additional CPU, but overlapped threads.
+
+The CPU topology can be inspected via sysfs, e.g. for :
 
 ```bash
 $ for c in /sys/devices/system/cpu/cpu*[0-9]/; do cat $c/topology/thread_siblings_list; done | sort -u
@@ -217,6 +229,22 @@ Other considerations:
 - CPU cores versus threads
 
 Depends on fully refactoring the lua code to draw rings.
+
+#### TODO: Memory rings could have option to render memory read and write utilisation
+
+A ring showing the memory use is quite static and boring. That's easily reflected by a simple flat bar or percentage stat. Graphing memory read and write access would be more interesting.
+
+#### TODO: storage rings could have option to render device read and write
+
+Similar to memory todo above, graphing the read and write per storage device in the ring would be interesting.
+
+#### TODO: log scale for rings
+
+For storage, memory and network IO, often there's a low level of activity which means the rings or graph levels are under utilised. A logarithmic scale could help stretch out smaller values.
+
+#### TODO: Add GPU rings
+
+Currently, no GPU stats are utilisation is shown.
 
 ## Related Work
 
