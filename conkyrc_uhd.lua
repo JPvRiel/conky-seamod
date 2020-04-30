@@ -1,14 +1,9 @@
 --[[===========================================================================
 Example for 32" UHD / 4K screen with 125% font scaling
 
-Date    : 2020/04/30
-Author  : SeaJey, modified by JPvRiel
-Version : v0.3
+Author  : SeaJey, Maxiwell and JPvRiel
+Conky   : >= 1.10
 License : Distributed under the terms of GNU GPL version 2 or later
-
-This version is a modification of lunatico_rings.lua wich is modification of conky_orange.lua
-- conky_orange.lua:    http://gnome-look.org/content/show.php?content=137503&forumpage=0
-- lunatico_rings.lua:  http://gnome-look.org/content/show.php?content=142884
 ===========================================================================--]]
 
 conky.config = {

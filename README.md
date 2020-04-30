@@ -15,12 +15,12 @@ Seamod theme was built by SeaJey. Maxiwell modified the original theme for conky
 
 ### by JPvRiel
 
-Fixes
+Fixes:
 
 - `border_outer_margin` can be adjusted without breaking the alignment of rings.
-- now runs on Ubuntu 16.04 LTS with Gnome 3.18 using `dock` or `normal` window type and hints.
+- now runs on Ubuntu 16.04 / 18.04 LTS with Gnome 3.18 / 3.28 using `dock` or `normal` window type and hints.
 
-Changes/enhancements
+Changes/enhancements:
 
 - gracefully accommodates switching between wired and wireless. NET section shows info for wired (eth0) else wireless (wlan0) info is shown.
 - `own_window_argb_value` conifg option for background and semi-transparency settings.
@@ -31,7 +31,11 @@ Changes/enhancements
 - Added a few extra conky lua functions to calculate the min, max and average frequency of the cpu cores (requires `nproc` command), given this influences CPU temperature and fan speed.
   - Min to Max value added as 'Freq:' near the top under 'Temp:' and 'Fan:' values.
   - One can use `${nproc}`, `${freq_min}`, `${freq_max}`, and `${freq_avg}` elsewhere in the conky TEXT section.
-- Added example script to feed last 5 warning or error messages from syslog.
+- Added examples to closely pair/overlap CPU sibling hyperthreads.
+- Adjusted `seamod_rings.lau` and `conkyrc.lau` for UHD/4K with 125% font scaling.
+  - Previous examples for HD resolution remain as well.
+- Added global ring scaling vars to `seamod_rings.lau` for better singular control.
+- Added example scripts to feed last 5 warning or error messages from syslog or journald.
 
 ## Install and run
 
@@ -65,11 +69,32 @@ Hints:
 
 ## Modifying
 
-Hardware such as number of CPU cores, the place to get temperatures and even the way in which network devices are named varies, so at least one or two modifications will likely be needed. Herewith, the most likely changes that are typically needed.
+Hardware such as number of CPU cores, the place to get temperatures and even the way in which network devices are named varies, so some modifications will likely be needed depending on your display setup:
+
+- Screen resolution, e.g. HD vs UHD
+- DPI and font scaling factor, e.g. 100% vs 125%
+
+AFAIK, Gnome 3.28 (for Ubuntu 18.04 LTS) display settings options does not offer per display fractional scaling yet.
+
+Herewith, the most likely changes that are typically needed.
+
+### Adjusting the position of rings
+
+If the graphs are not nicely aligned with the text, it's likely the issue relates to complications with conky handling high DPI settings or display font scaling.
+
+You may need to shift the position of the text offsets to align with rings that are rendered independently from the text and other built-in conky graph options. Also look at the example config files for HD vs UHD (with 125% font scaling).
+
+- In `conkyrc.lua`, adjust `voffset` sections in the text section to help text fit nicely with gauges/rings.
+- In `seamod_rings.lua`, adjust gauges vars and table attributes for position, radius and thickness.
+
+See:
+
+- [#944: conky graph does not support HiDPI screen display like Mac Retina](https://github.com/brndnmtthws/conky/issues/944)
+- [#218: Conky looks different on autostart than with manual start using XFCE](https://github.com/brndnmtthws/conky/issues/218)
 
 ### Adjusting the number of rings
 
-Modify CPU rings in `seamod_rings.lua`'s `gauge` data structure list. You'll likely need to the number of 'cpu' ring items to match the output of the `nproc` command.
+Modify CPU rings in `seamod_rings.lua`'s `gauge` table vars. You'll likely need to the number of 'cpu' ring items to match the output of the `nproc` command.
 
 Current examples are for an Intel i7-9750H (6 core, 12 thread). To adapt it:
 
@@ -78,19 +103,22 @@ Current examples are for an Intel i7-9750H (6 core, 12 thread). To adapt it:
 - If you have more than 12, there's a bit of room left to extend it up to 16.
   - Scaling down the ring thickness will be needed for more than 16 cpu items.
 
-There are some variations on the ring concept depending on hyper threading and the number of cores. 
+There are some variations on the ring concept depending on hyper threading and the number of cores:
 
-- The original evenly spaced CPU ring concept is in [seamod_rings_cpu_simple.lua](seamod_rings_cpu_simple.lua).
+- The original evenly spaced CPU ring concept is in [seamod_rings_hd_simple.lua](seamod_rings_hd_simple.lua).
 - My adaptations relate sibling hyper-thread 'cpus'. There are two styles to choose from:
-  - [seamod_ring_cpu_pairs.lua](seamod_ring_cpu_pairs.lua):
+  - [seamod_rings_hd_cpu_pairs.lua](seamod_rings_hd_cpu_pairs.lua):
+    - Worked on my system with standard 1920x1080 HD resolution.
     - Sibling hyperthreads rings are paired closely to look as if they're a single ring.
     - This more clearly reflects a core with a pair of hyperthreads.
-  - [seamod_rings_cpu_overlap.lua](seamod_rings_cpu_overlap.lua):
+  - [seamod_rings_uhd_txt_125.lua](seamod_rings_uhd_txt_125.lua):
+    - Similar to above, but scaled for UHD and font rendering at 125%.
+  - [seamod_rings_hd_cpu_overlap.lua](seamod_rings_hd_cpu_overlap.lua):
     - Both sibling hyperthreads are drawning in the same ring contributing half of the opacity. Each has it's own red marker.
     - This provides a nicer way to cram in a high hyper-threaded CPU count, e.g. 16+, in order to avoid too many skinny rings.
     - It's also more technically accurate since a hyper-threaded instance of a core isn't a full additional CPU, but overlapped threads.
 
-The CPU topology can be inspected via sysfs, e.g. for :
+The CPU topology can be inspected via sysfs, e.g.:
 
 ```bash
 $ for c in /sys/devices/system/cpu/cpu*[0-9]/; do cat $c/topology/thread_siblings_list; done | sort -u
@@ -104,19 +132,26 @@ $ for c in /sys/devices/system/cpu/cpu*[0-9]/; do cat $c/topology/thread_sibling
 
 Change 'fs_used_perc' items to suite systems partitioning scheme. E.g. default has 'root', 'home' and 'var' separate.
 
-Ring/gauge sections
-
-- In `conkyrc.lua`
-  - 3 lines of info are accommodated above the graph sections - substitute as you deem fit, but keep the spacing at 3 lines to avoid misalignment between rings and text.
-- In `seamod_rings.lua`
-  - Fiddle with `graph_radius`, `graph_thickness` and if used, `txt_radius`, so adjust ring sizing.
-  - In `gauges` items, use `conky_line` instead of `name` and `arg` if advanced objects are needed.
-
 #### Keeping the rings and text info aligned
 
 *N.B!* Alignment between rings and the text is painfully brittle. So avoid changing the number of lines in the text section that algin next to rings. See limitations section below for why...
 
 Best place to add own text or info is under `# Extra info`. And to make room, you can remove some lines. This section is past where the rings are rendered.
+
+To adjust ring/gauge sections:
+
+- In `seamod_rings.lua`, the newer version allows for quicker adjustment via global vars, such as:
+  - `gauge_max_outer_radius`: biggest outermost gauge/ring size.
+  - `gauge_target_inner_radius`: desired innermost gauge/ring size.
+  - etc.
+- In the older/classic way, each item in the gauges table needs to be tweaked:
+  - Fiddle with `graph_radius`, `graph_thickness` and if used, `txt_radius`, so adjust ring sizing.
+  - In `gauges` items, use `conky_line` instead of `name` and `arg` if advanced objects are needed.
+
+After adjusting rings, you'll have to realign the text offsets in `conkyrc.lua`:
+
+- Look to tweak `voffset` and `offset` values in front of most items.
+- Note, 3 lines of info are accommodated next to rings and above the built-in graph sections - substitute as you deem fit, but keep the spacing at 3 lines to avoid misalignment between rings and text.
 
 ### Setting appropriate network names
 
@@ -228,17 +263,17 @@ Other considerations:
 - CPU base frequency (not same as max/turbo boost), e.g. 2.8 GHz vs 3.8 GHz
 - CPU cores versus threads
 
-Depends on fully refactoring the lua code to draw rings.
+Depends on fully refactoring the lua code to define and draw rings dynamically upon every refresh.
 
 #### TODO: Memory rings could have option to render memory read and write utilisation
 
 A ring showing the memory use is quite static and boring. That's easily reflected by a simple flat bar or percentage stat. Graphing memory read and write access would be more interesting.
 
-#### TODO: storage rings could have option to render device read and write
+#### TODO: Storage rings could have option to render device read and write
 
 Similar to memory todo above, graphing the read and write per storage device in the ring would be interesting.
 
-#### TODO: log scale for rings
+#### TODO: Logarithmic scale for rings
 
 For storage, memory and network IO, often there's a low level of activity which means the rings or graph levels are under utilised. A logarithmic scale could help stretch out smaller values.
 

@@ -1,16 +1,15 @@
---==============================================================================
---                            seamod_rings.lua
---
---  Date    : 2016/11/13
---  Author  : SeaJey, modified by JPvRiel
---  Version : v0.2
---  License : Distributed under the terms of GNU GPL version 2 or later
---
---  This version is a modification of lunatico_rings.lua wich is modification of conky_orange.lua
---
---  conky_orange.lua:    http://gnome-look.org/content/show.php?content=137503&forumpage=0
---  lunatico_rings.lua:  http://gnome-look.org/content/show.php?content=142884
---==============================================================================
+--[[===========================================================================
+Example for 15.6" HD screen with 100% font scaling, evenly split CPU thread rings (close to original work)
+
+Date    : 2016/11/13
+Author  : SeaJey, modified by JPvRiel
+Version : v0.3
+License : Distributed under the terms of GNU GPL version 2 or later
+
+This version is a modification of lunatico_rings.lua wich is modification of conky_orange.lua
+- conky_orange.lua:    http://gnome-look.org/content/show.php?content=137503&forumpage=0
+- lunatico_rings.lua:  http://gnome-look.org/content/show.php?content=142884
+===========================================================================]]--
 
 require 'cairo'
 
