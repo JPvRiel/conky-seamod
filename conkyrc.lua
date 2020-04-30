@@ -169,5 +169,5 @@ ${voffset 0}
 ${offset 10}${font Roboto:bold:size=10}${color6}JOURNAL ${font Roboto:regular:size=10}${color1}(Err|Warn):
 ${voffset 3}\
 ${color3}${font Ubuntu Condensed:light:size=8}${texecpi 15 ~/.conky/seamod/journal-err-feed.sh }
-${voffset -100}\
+${voffset -90}\
 ]];

@@ -1,9 +1,14 @@
 --[[===========================================================================
 Example for 32" UHD / 4K screen with 125% font scaling
 
-Author  : SeaJey, Maxiwell and JPvRiel
-Conky   : >= 1.10
+Date    : 2020/04/30
+Author  : SeaJey, modified by JPvRiel
+Version : v0.3
 License : Distributed under the terms of GNU GPL version 2 or later
+
+This version is a modification of lunatico_rings.lua wich is modification of conky_orange.lua
+- conky_orange.lua:    http://gnome-look.org/content/show.php?content=137503&forumpage=0
+- lunatico_rings.lua:  http://gnome-look.org/content/show.php?content=142884
 ===========================================================================--]]
 
 conky.config = {
@@ -164,5 +169,5 @@ ${voffset 0}
 ${offset 10}${font Roboto:bold:size=10}${color6}JOURNAL ${font Roboto:regular:size=10}${color1}(Err|Warn):
 ${voffset 3}\
 ${color3}${font Ubuntu Condensed:light:size=8}${texecpi 15 ~/.conky/seamod/journal-err-feed.sh }
-${voffset -100}\
+${voffset -90}\
 ]];
